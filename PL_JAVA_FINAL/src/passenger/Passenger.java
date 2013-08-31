@@ -7,7 +7,7 @@ public class Passenger {
 	// private String mPassengerName;
 	private int mArriveTime;
 	private int mTicketingLineArriveTime;
-	
+
 	public int getTicketingLineArriveTime() {
 		return mTicketingLineArriveTime;
 	}
@@ -20,7 +20,7 @@ public class Passenger {
 	private String mStartStation;
 	private String mArriveStation;
 	private int mTicketWaitingTime;
-	
+
 	public void setTicketWaitingTime(int mTicketWaitingTime) {
 		this.mTicketWaitingTime = mTicketWaitingTime;
 	}
@@ -81,7 +81,7 @@ public class Passenger {
 	public int getTicketWaitingTime() {
 		return mTicketWaitingTime;
 	}
-	
+
 	public int getmTicketingFinishTime() {
 		return mTicketingFinishTime;
 	}
@@ -127,6 +127,13 @@ public class Passenger {
 				+ ", mTrainArriveTime=" + mTrainArriveTime + "]";
 	}
 
-
+	public String writePassengerInfo() {
+		return " PassengerID=" + mPassengerID
+				+ ", TicketWaitingTime=" + mTicketWaitingTime
+				+ ", TicketingFinishTime=" + mTicketingFinishTime
+				+ ", WaitingTrainTime=" + mWaitingTrainTime
+				+ ", TrainStartTime=" + mTrainStartTime
+				+ ", TrainArriveTime=" + mTrainArriveTime ;
+	}
 
 }

@@ -16,8 +16,10 @@ public class ResultReporter {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < resultList.size(); i++) {
-			String passengerInfo = resultList.get(i).toString();
-			result.write(passengerInfo);
+			int passengerNum = 2001+i;
+			String passengerName = "Passenger"+passengerNum;
+			String passengerInfo = passengerName + resultList.get(i).writePassengerInfo();			
+			result.write(StringUtil.appendNewLine(passengerInfo));
 		}
 		result.close();
 	}
