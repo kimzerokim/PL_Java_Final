@@ -8,7 +8,7 @@ import system.Main;
 
 public class TrainWaitingLine {
 	private List<Passenger> mWaitingTrainLine = new ArrayList<Passenger>();
-	
+
 	public void inputPassenger(Passenger passenger) {
 		mWaitingTrainLine.add(passenger);
 	}
@@ -25,12 +25,14 @@ public class TrainWaitingLine {
 	}
 
 	public void handle() {
+		int numberOfWaitingPeople = mWaitingTrainLine.size();
 		if (isTrainArrive()) {
 			clearWaitingList();
 		} else {
-			int numberOfWaitingPeople = mWaitingTrainLine.size();
-			for (int i = 0; i < numberOfWaitingPeople; i++) {
-				mWaitingTrainLine.get(i).increaseWaitingTrainTime();
+			if (!mWaitingTrainLine.isEmpty()) {
+				for (int i = 0; i < numberOfWaitingPeople; i++) {
+					mWaitingTrainLine.get(i).increaseWaitingTrainTime();
+				}
 			}
 		}
 	}
