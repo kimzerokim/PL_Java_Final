@@ -15,4 +15,8 @@ public class PassengerData {
 	public Passenger getPassenger(int idx) {
 		return mPassengers.get(idx);
 	}
+	
+	public List<Passenger> getPassengerList() {
+		return mPassengers;
+	}
 }

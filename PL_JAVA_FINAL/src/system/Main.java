@@ -4,6 +4,7 @@ import map.MapInfo;
 import passenger.Passenger;
 import passenger.PassengerData;
 import train.station.*;
+import util.ResultReporter;
 
 public class Main {
 	private static int passedTime = 0;
@@ -54,8 +55,8 @@ public class Main {
 			int time = passenger.getTrainStartTime()
 					+ new MapInfo().getTime(startLocation, arriveLocation);
 			passenger.setTrainArriveTime(time);
-			
-			System.out.println(passengerData.getPassenger(i).toString());
 		}
+		
+		ResultReporter.makeResultFile(passengerData.getPassengerList());
 	}
 }
