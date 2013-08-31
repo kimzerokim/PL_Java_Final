@@ -1,14 +1,18 @@
 package train.station;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import passenger.Passenger;
+import system.Main;
 import train.TrainWaitingLine;
 
 public class TrainStation {
 	private static TrainStation _instance;
 	private Queue<Passenger> mTicketWaitingLine = new LinkedList<Passenger>();
+	private List<Passenger> mIntervalLine = new ArrayList<Passenger>();
 	private TicketBox mBox1 = new TicketBox();
 	private TicketBox mBox2 = new TicketBox();
 	private TicketBox mBox3 = new TicketBox();
@@ -29,6 +33,7 @@ public class TrainStation {
 	}
 
 	public void inputPassengerToTicketWaitingLine(Passenger passenger) {
+		passenger.setTicketingLineArriveTime(Main.getCurTime());
 		pushPassenger(mTicketWaitingLine, passenger);
 	}
 
@@ -36,18 +41,32 @@ public class TrainStation {
 		int LineLength = mTicketWaitingLine.size();
 		for (int i = 0; i < LineLength; i++) {
 			Passenger curPassenger = mTicketWaitingLine.poll();
-			System.out.println(curPassenger.toString());
+//			System.out.println(curPassenger.toString());
 			pushPassenger(mTicketWaitingLine, curPassenger);
 		}
 	}
 
 	public void handleTicketWaitingQueue() {
-		if (mBox1.isEmpty() && mTicketWaitingLine.peek() != null)
-			mBox1.receivePassenger(mTicketWaitingLine.poll());
-		if (mBox2.isEmpty() && mTicketWaitingLine.peek() != null)
-			mBox2.receivePassenger(mTicketWaitingLine.poll());
-		if (mBox3.isEmpty() && mTicketWaitingLine.peek() != null)
-			mBox3.receivePassenger(mTicketWaitingLine.poll());
+		if (mBox1.isEmpty() && mTicketWaitingLine.peek() != null) {
+			Passenger passenger = mTicketWaitingLine.poll();
+			setTicketWaitTime(passenger);
+			mBox1.receivePassenger(passenger);
+		}
+		if (mBox2.isEmpty() && mTicketWaitingLine.peek() != null) {
+			Passenger passenger = mTicketWaitingLine.poll();
+			setTicketWaitTime(passenger);
+			mBox2.receivePassenger(passenger);
+		}
+		if (mBox3.isEmpty() && mTicketWaitingLine.peek() != null) {
+			Passenger passenger = mTicketWaitingLine.poll();
+			setTicketWaitTime(passenger);
+			mBox3.receivePassenger(passenger);
+		}
+	}
+
+	private void setTicketWaitTime(Passenger passenger) {
+		int waitTime = Main.getCurTime() - passenger.getTicketingLineArriveTime();
+		passenger.setTicketWaitingTime(waitTime);
 	}
 
 	public void handleTicketBox() {
@@ -61,6 +80,6 @@ public class TrainStation {
 	}
 
 	public void handleTrainWaitingLine() {
-		mTrainWaitingLine.handle();		
+		mTrainWaitingLine.handle();	
 	}
 }

@@ -1,5 +1,6 @@
 package system;
 
+import map.MapInfo;
 import passenger.Passenger;
 import passenger.PassengerData;
 import train.station.*;
@@ -14,19 +15,19 @@ public class Main {
 	public static void main(String[] args) {
 		PassengerData passengerData = new PassengerData();
 		passengerData.readAllPassengers();
-		
+
 		int waitCount = 0;
 		TrainStation station = TrainStation.getInstance();
 		for (passedTime = 0; passedTime < 200; passedTime++) {
-			// put passenger to Ticket Waiting Queue 
-			for (int i=waitCount; i<50; i++) {
+			// put passenger to Ticket Waiting Queue
+			for (int i = waitCount; i < 50; i++) {
 				Passenger passenger = passengerData.getPassenger(i);
 				if (passedTime == passenger.getArriveTime())
 					station.inputPassengerToTicketWaitingLine(passenger);
 				else {
 					waitCount = i;
 					break;
-				}				
+				}
 			}
 			// put passenger to Empty ticketbox
 			station.handleTicketWaitingQueue();
@@ -34,16 +35,27 @@ public class Main {
 			station.handleTrainWaitingLine();
 		}
 
-		// 50명의 승객을 각각 TrainStation의 mTicketReservationLine에 넣어준다.
-		
-//		Seoul.getInstance().checkReservationLine();
-	
-//		for (int i = 0; i<20; i++) {
-//			System.out.println(getCurTime());
-//			Seoul.getInstance().setPassengerToTicketWaitingLine();
-//			Seoul.getInstance().checkTicketWaitingLine();
-//			timeIncrease();
-//			System.out.println("--------");
-//		}
+		// for (int i=0; i<50; i++) {
+		// Passenger passenger = passengerData.getPassenger(i);
+		// String startLocation = passenger.getStartStation();
+		// String arriveLocation = passenger.getArriveStation();
+		// System.out.println(startLocation);
+		// System.out.println(arriveLocation);
+		// int time = passenger.getTrainStartTime() + new
+		// MapInfo().getTime(startLocation, arriveLocation);
+		// passenger.setTrainArriveTime(time);
+		// }
+
+		for (int i = 0; i < 50; i++) {
+			Passenger passenger = passengerData.getPassenger(i);
+			String startLocation = passenger.getStartStation();
+			String arriveLocation = passenger.getArriveStation();
+			
+			int time = passenger.getTrainStartTime()
+					+ new MapInfo().getTime(startLocation, arriveLocation);
+			passenger.setTrainArriveTime(time);
+			
+			System.out.println(passengerData.getPassenger(i).toString());
+		}
 	}
 }

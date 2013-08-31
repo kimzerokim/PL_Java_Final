@@ -27,6 +27,9 @@ public class TrainWaitingLine {
 	public void handle() {
 		int numberOfWaitingPeople = mWaitingTrainLine.size();
 		if (isTrainArrive()) {
+			for (int i = 0; i < numberOfWaitingPeople; i++) {
+				mWaitingTrainLine.get(i).setTrainStartTime(Main.getCurTime());;
+			}
 			clearWaitingList();
 		} else {
 			if (!mWaitingTrainLine.isEmpty()) {

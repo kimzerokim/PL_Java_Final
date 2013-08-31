@@ -6,10 +6,26 @@ public class Passenger {
 	private int mPassengerID;
 	// private String mPassengerName;
 	private int mArriveTime;
+	private int mTicketingLineArriveTime;
+	
+	public int getTicketingLineArriveTime() {
+		return mTicketingLineArriveTime;
+	}
+
+	public void setTicketingLineArriveTime(int mTicketingLineArriveTime) {
+		this.mTicketingLineArriveTime = mTicketingLineArriveTime;
+	}
+
 	private int mTicketingRequireTime; // 티켓팅소요시간
 	private String mStartStation;
 	private String mArriveStation;
 	private int mTicketWaitingTime;
+	
+	public void setTicketWaitingTime(int mTicketWaitingTime) {
+		this.mTicketWaitingTime = mTicketWaitingTime;
+	}
+
+	private int mTicketingFinishTime;
 	private int mWaitingTrainTime;
 	private int mTrainStartTime;
 	private int mTrainArriveTime;
@@ -38,7 +54,7 @@ public class Passenger {
 		mTicketingRequireTime = ticketingTime;
 	}
 
-	public int getTicketingTime() {
+	public int getTicketingRequireTime() {
 		return mTicketingRequireTime;
 	}
 
@@ -64,6 +80,14 @@ public class Passenger {
 
 	public int getTicketWaitingTime() {
 		return mTicketWaitingTime;
+	}
+	
+	public int getmTicketingFinishTime() {
+		return mTicketingFinishTime;
+	}
+
+	public void setTicketingFinishTime(int finishTime) {
+		this.mTicketingFinishTime = finishTime;
 	}
 
 	public void increaseWaitingTrainTime() {
@@ -93,8 +117,16 @@ public class Passenger {
 	@Override
 	public String toString() {
 		return "Passenger [mPassengerID=" + mPassengerID + ", mArriveTime="
-				+ mArriveTime + ", mTicketingTime=" + mTicketingRequireTime
-				+ ", mStartStation=" + mStartStation + ", mArriveStation="
-				+ mArriveStation + "]";
+				+ mArriveTime + ", mTicketingRequireTime="
+				+ mTicketingRequireTime + ", mStartStation=" + mStartStation
+				+ ", mArriveStation=" + mArriveStation
+				+ ", mTicketWaitingTime=" + mTicketWaitingTime
+				+ ", mTicketingFinishTime=" + mTicketingFinishTime
+				+ ", mWaitingTrainTime=" + mWaitingTrainTime
+				+ ", mTrainStartTime=" + mTrainStartTime
+				+ ", mTrainArriveTime=" + mTrainArriveTime + "]";
 	}
+
+
+
 }
