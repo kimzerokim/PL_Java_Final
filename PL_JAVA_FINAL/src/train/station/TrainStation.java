@@ -1,89 +1,35 @@
 package train.station;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import passenger.Passenger;
-import system.Main;
-import train.*;
+import train.TrainWaitingLine;
 
 public class TrainStation {
-	public enum StationName {
-		Seoul, Wonju, Chuncheon, Asan, Deajeon, Kyungju, Gwangju;
-	}
-
-	protected StationName mStationName;
-	private Queue<Passenger> mTicketReservationLine = new LinkedList<Passenger>();
+	private static TrainStation _instance;
 	private Queue<Passenger> mTicketWaitingLine = new LinkedList<Passenger>();
-	private List<TicketBox> mEmptyTicketBox = new ArrayList<TicketBox>();
-	private static TicketBox mBox1 = new TicketBox();
-	private static TicketBox mBox2 = new TicketBox();
-	private static TicketBox mBox3 = new TicketBox();
-	private TrainWaitingLine mTrainWaitingLine = TrainWaitingLine
-			.createTrainWaitingLine();
+	private TicketBox mBox1 = new TicketBox();
+	private TicketBox mBox2 = new TicketBox();
+	private TicketBox mBox3 = new TicketBox();
+	private TrainWaitingLine mTrainWaitingLine = new TrainWaitingLine();
 
-	protected TrainStation(StationName name) {
-		mStationName = name;
+	private TrainStation() {
 	}
 
-	public static TrainStation getTrainStation(String startStation) {
-		switch (startStation) {
-		case "Asan":
-			return Asan.getInstance();
-		case "Chuncheon":
-			return Chuncheon.getInstance();
-		case "Deajeon":
-			return Deajeon.getInstance();
-		case "Gwangju":
-			return Gwangju.getInstance();
-		case "Kyungju":
-			return Kyungju.getInstance();
-		case "Seoul":
-			return Seoul.getInstance();
-		case "Wonju":
-			return Wonju.getInstance();
-
-		default:
-			return null;
+	public static TrainStation getInstance() {
+		if (_instance != null) {
+			return _instance;
 		}
+		return _instance = new TrainStation();
 	}
 
 	private void pushPassenger(Queue<Passenger> curQueue, Passenger passenger) {
 		curQueue.add(passenger);
 	}
 
-	private Passenger pullPassenger(Queue<Passenger> curQueue) {
-		if (!curQueue.isEmpty())
-			return curQueue.poll();
-		else {
-			System.out.println("waitingQueue is Empty");
-			return null;
-		}
-	}
-
-	public void setPassengerToTicketReservationLine(Passenger passenger) {
-		pushPassenger(mTicketReservationLine, passenger);
-	}
-
-	public Passenger getPassengerFromTicketReservationLine() {
-		return pullPassenger(mTicketReservationLine);
-	}
-
-	public void setPassengerToTicketWaitingLine() {
-		Passenger handlePassenger = mTicketReservationLine.peek();
-		if (handlePassenger.getArriveTime() == Main.getCurTime()) {
-			handlePassenger = getPassengerFromTicketReservationLine();
-			pushPassenger(mTicketWaitingLine, handlePassenger);
-		} else
-			return;
-	}
-
-	public void checkReservationLine() { // for Test
-		while (mTicketReservationLine.peek() != null) {
-			System.out.println(mTicketReservationLine.poll());
-		}
+	public void inputPassengerToTicketWaitingLine(Passenger passenger) {
+		pushPassenger(mTicketWaitingLine, passenger);
 	}
 
 	public void checkTicketWaitingLine() { // for Test
@@ -95,53 +41,26 @@ public class TrainStation {
 		}
 	}
 
-	public List<TicketBox> checkEmptyTicketBox() {
-		if (mBox1.isEmpty())
-			mEmptyTicketBox.add(mBox1);
-//		if (mBox2.isEmpty())
-//			mEmptyTicketBox.add(mBox2);
-//		if (mBox3.isEmpty())
-//			mEmptyTicketBox.add(mBox3);
-		return mEmptyTicketBox;
+	public void handleTicketWaitingQueue() {
+		if (mBox1.isEmpty() && mTicketWaitingLine.peek() != null)
+			mBox1.receivePassenger(mTicketWaitingLine.poll());
+		if (mBox2.isEmpty() && mTicketWaitingLine.peek() != null)
+			mBox2.receivePassenger(mTicketWaitingLine.poll());
+		if (mBox3.isEmpty() && mTicketWaitingLine.peek() != null)
+			mBox3.receivePassenger(mTicketWaitingLine.poll());
 	}
 
-	public TicketBox setPassengerToTicketBox() { 
-		// 한번에 같은 출발지의 사람이 같은 시간에 오지 않는다.(데이터에서)
-		TicketBox curBox;
-		mEmptyTicketBox.clear();
-		checkEmptyTicketBox();
-		if (!mEmptyTicketBox.isEmpty()) {
-			curBox = mEmptyTicketBox.get(0);
-			curBox.receivePassenger(mTicketWaitingLine.poll());
-			return curBox;
-		} else {
-			if (mTicketWaitingLine.peek() != null)
-				mTicketWaitingLine.peek().increaseTicketWaitingTime();
-			return null;
-		}
+	public void handleTicketBox() {
+		Passenger passenger;
+		if ((passenger = mBox1.handle()) != null)
+			mTrainWaitingLine.inputPassenger(passenger);
+		if ((passenger = mBox2.handle()) != null)
+			mTrainWaitingLine.inputPassenger(passenger);
+		if ((passenger = mBox3.handle()) != null)
+			mTrainWaitingLine.inputPassenger(passenger);
 	}
 
-	public void handle() {
-		Passenger handlePassenger = mTicketReservationLine.peek();
-		TicketBox handleTicketBox;
-		setPassengerToTicketWaitingLine();
-		System.out.println(Main.getCurTime());
-		handleTicketBox = setPassengerToTicketBox();
-		try {
-			if (!handleTicketBox.isEmpty()) {
-				System.out.println("TicketboxComplete");
-				handleTicketBox.setPassengerInfo();
-				if(handleTicketBox.isTicketingFinish())
-					System.out.println(handleTicketBox.completeTicketing()
-						.toString());
-			}
-		} catch (NullPointerException e) {
-			System.out.println(Main.getCurTime());
-		}
-		if (!handleTicketBox.isEmpty()) {
-			handleTicketBox.ticketingDependCurTime(handlePassenger);
-		} else
-			return;
+	public void handleTrainWaitingLine() {
+		mTrainWaitingLine.handle();		
 	}
-
 }

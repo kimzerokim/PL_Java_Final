@@ -5,7 +5,6 @@ import system.Main;
 
 public class TicketBox {
 	private Passenger mCurTicketingPassenger;
-	private int mCurTime;
 	private int mCurPassengerArriveTime;
 	private int mCurPassengerTicketingFinishTime;
 
@@ -14,15 +13,13 @@ public class TicketBox {
 	}
 
 	public void setPassengerInfo() {
-		setCurPassengerArriveTime();
 		setCurPassengerTicketingFinishTime();
-		mCurTicketingPassenger.setTicketingStartTime(mCurPassengerArriveTime);
 	}
-	
+
 	public Passenger getCurPassenger() {
 		return mCurTicketingPassenger;
 	}
-	
+
 	public Passenger completeTicketing() {
 		Passenger tmp = mCurTicketingPassenger;
 		mCurTicketingPassenger = null;
@@ -34,7 +31,9 @@ public class TicketBox {
 	}
 
 	public void setCurPassengerTicketingFinishTime() {
-		mCurPassengerTicketingFinishTime = mCurPassengerArriveTime + mCurTicketingPassenger.getTicketingTime();
+		setCurPassengerArriveTime();
+		mCurPassengerTicketingFinishTime = mCurPassengerArriveTime
+				+ mCurTicketingPassenger.getTicketingTime();
 	}
 
 	public boolean isTicketingFinish() {
@@ -50,14 +49,14 @@ public class TicketBox {
 		} else
 			return false;
 	}
-	
-	public Passenger ticketingDependCurTime(Passenger passenger) {
-		receivePassenger(passenger);
-		setPassengerInfo();
-		if (isTicketingFinish()) {
-			return completeTicketing();
+
+	public Passenger handle() {
+		if (!isEmpty()) {
+			setPassengerInfo();
+			if (isTicketingFinish()) {
+				return completeTicketing();
+			}
 		}
-		else
-			return null;
+		return null;
 	}
 }

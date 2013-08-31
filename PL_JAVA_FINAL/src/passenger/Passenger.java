@@ -10,7 +10,6 @@ public class Passenger {
 	private String mStartStation;
 	private String mArriveStation;
 	private int mTicketWaitingTime;
-	private int mTicketingStartTime;
 	private int mWaitingTrainTime;
 	private int mTrainStartTime;
 	private int mTrainArriveTime;
@@ -65,14 +64,6 @@ public class Passenger {
 
 	public int getTicketWaitingTime() {
 		return mTicketWaitingTime;
-	}
-
-	public void setTicketingStartTime(int time) {
-		mTicketingStartTime = time;
-	}
-
-	public int getTicketingStartTime() {
-		return mTicketingStartTime;
 	}
 
 	public void increaseWaitingTrainTime() {
