@@ -1,8 +1,6 @@
 package train.station;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import passenger.Passenger;
@@ -12,7 +10,6 @@ import train.TrainWaitingLine;
 public class TrainStation {
 	private static TrainStation _instance;
 	private Queue<Passenger> mTicketWaitingLine = new LinkedList<Passenger>();
-	private List<Passenger> mIntervalLine = new ArrayList<Passenger>();
 	private TicketBox mBox1 = new TicketBox();
 	private TicketBox mBox2 = new TicketBox();
 	private TicketBox mBox3 = new TicketBox();
