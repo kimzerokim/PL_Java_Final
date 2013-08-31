@@ -38,13 +38,18 @@ public class TrainWaitingLine {
 		int numberOfWaitingPeople = mWaitingTrainLine.size();
 		if (!isTrainArrive()) {
 			for (int i = 0; i < numberOfWaitingPeople; i++) {
-				mWaitingTrainLine.get(i);
+				mWaitingTrainLine.get(i).increaseWaitingTrainTime();
+				System.out.println(mWaitingTrainLine.get(i).toString());
 			}
 		} else {
 			for (int i = 0; i < numberOfWaitingPeople; i++) {
-
+				////////////승객을 빼주는데 이때 기록을 하자.
 			}
 		}
+	}
+	
+	public void boardingPassengerToTrain() {
+		
 	}
 
 }

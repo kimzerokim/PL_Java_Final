@@ -1,21 +1,13 @@
-package train;
+package train.station;
 
 import passenger.Passenger;
 import system.Main;
 
 public class TicketBox {
-	private static TicketBox boxInstance;
 	private Passenger mCurTicketingPassenger;
 	private int mCurTime;
 	private int mCurPassengerArriveTime;
 	private int mCurPassengerTicketingFinishTime;
-
-	public static TicketBox createTicketBox() {
-		if (boxInstance != null) {
-			return boxInstance;
-		}
-		return boxInstance = new TicketBox();
-	}
 
 	public void receivePassenger(Passenger passenger) {
 		mCurTicketingPassenger = passenger;
@@ -23,11 +15,18 @@ public class TicketBox {
 
 	public void setPassengerInfo() {
 		setCurPassengerArriveTime();
+		setCurPassengerTicketingFinishTime();
 		mCurTicketingPassenger.setTicketingStartTime(mCurPassengerArriveTime);
 	}
 	
-	public Passenger completeTicketing() {
+	public Passenger getCurPassenger() {
 		return mCurTicketingPassenger;
+	}
+	
+	public Passenger completeTicketing() {
+		Passenger tmp = mCurTicketingPassenger;
+		mCurTicketingPassenger = null;
+		return tmp;
 	}
 
 	public void setCurPassengerArriveTime() {
@@ -52,7 +51,7 @@ public class TicketBox {
 			return false;
 	}
 	
-	public Passenger TicketingDependCurTime(Passenger passenger) {
+	public Passenger ticketingDependCurTime(Passenger passenger) {
 		receivePassenger(passenger);
 		setPassengerInfo();
 		if (isTicketingFinish()) {

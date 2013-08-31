@@ -59,7 +59,7 @@ public class Passenger {
 		return mArriveStation;
 	}
 
-	public void setTicketWaitingTime() {
+	public void increaseTicketWaitingTime() {
 		mTicketWaitingTime++;
 	}
 
@@ -75,8 +75,8 @@ public class Passenger {
 		return mTicketingStartTime;
 	}
 
-	public void setWaitingTrainTime(int time) {
-		mWaitingTrainTime = time;
+	public void increaseWaitingTrainTime() {
+		mWaitingTrainTime++;
 	}
 
 	public int getWaitingTrainTime() {

@@ -18,10 +18,11 @@ public class TrainStation {
 	private Queue<Passenger> mTicketReservationLine = new LinkedList<Passenger>();
 	private Queue<Passenger> mTicketWaitingLine = new LinkedList<Passenger>();
 	private List<TicketBox> mEmptyTicketBox = new ArrayList<TicketBox>();
-	private TicketBox mBox1 = TicketBox.createTicketBox();
-	private TicketBox mBox2 = TicketBox.createTicketBox();
-	private TicketBox mBox3 = TicketBox.createTicketBox();
-	private TrainWaitingLine mTrainWaitingLine = TrainWaitingLine.createTrainWaitingLine();
+	private static TicketBox mBox1 = new TicketBox();
+	private static TicketBox mBox2 = new TicketBox();
+	private static TicketBox mBox3 = new TicketBox();
+	private TrainWaitingLine mTrainWaitingLine = TrainWaitingLine
+			.createTrainWaitingLine();
 
 	protected TrainStation(StationName name) {
 		mStationName = name;
@@ -97,28 +98,50 @@ public class TrainStation {
 	public List<TicketBox> checkEmptyTicketBox() {
 		if (mBox1.isEmpty())
 			mEmptyTicketBox.add(mBox1);
-		if (mBox2.isEmpty())
-			mEmptyTicketBox.add(mBox2);
-		if (mBox3.isEmpty())
-			mEmptyTicketBox.add(mBox3);
+//		if (mBox2.isEmpty())
+//			mEmptyTicketBox.add(mBox2);
+//		if (mBox3.isEmpty())
+//			mEmptyTicketBox.add(mBox3);
 		return mEmptyTicketBox;
 	}
-	
-	public TicketBox setPassengerToTicketBox() {  // 한번에 같은 출발지의 사람이 같은 시간에 오지 않는다.(데이터에서)
+
+	public TicketBox setPassengerToTicketBox() { 
+		// 한번에 같은 출발지의 사람이 같은 시간에 오지 않는다.(데이터에서)
 		TicketBox curBox;
+		mEmptyTicketBox.clear();
 		checkEmptyTicketBox();
 		if (!mEmptyTicketBox.isEmpty()) {
 			curBox = mEmptyTicketBox.get(0);
 			curBox.receivePassenger(mTicketWaitingLine.poll());
 			return curBox;
-		}
-		else {
-			mTicketWaitingLine.peek().setTicketWaitingTime();
+		} else {
+			if (mTicketWaitingLine.peek() != null)
+				mTicketWaitingLine.peek().increaseTicketWaitingTime();
 			return null;
-		}			
+		}
 	}
-	
-	
 
+	public void handle() {
+		Passenger handlePassenger = mTicketReservationLine.peek();
+		TicketBox handleTicketBox;
+		setPassengerToTicketWaitingLine();
+		System.out.println(Main.getCurTime());
+		handleTicketBox = setPassengerToTicketBox();
+		try {
+			if (!handleTicketBox.isEmpty()) {
+				System.out.println("TicketboxComplete");
+				handleTicketBox.setPassengerInfo();
+				if(handleTicketBox.isTicketingFinish())
+					System.out.println(handleTicketBox.completeTicketing()
+						.toString());
+			}
+		} catch (NullPointerException e) {
+			System.out.println(Main.getCurTime());
+		}
+		if (!handleTicketBox.isEmpty()) {
+			handleTicketBox.ticketingDependCurTime(handlePassenger);
+		} else
+			return;
+	}
 
 }
